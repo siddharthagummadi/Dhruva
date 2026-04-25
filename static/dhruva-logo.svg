@@ -1,0 +1,62 @@
+<svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Core radial glow emanating from Dhruva point -->
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.6"/>
+      <stop offset="45%"  stop-color="#66FCF1" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#66FCF1" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Subtle ring fill glow -->
+    <radialGradient id="ring-ambient" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#66FCF1" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#66FCF1" stop-opacity="0.06"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ambient glow disk (very soft, wide) -->
+  <circle cx="50" cy="50" r="44" fill="url(#core-glow)"/>
+  <circle cx="50" cy="50" r="36" fill="url(#ring-ambient)"/>
+
+  <!-- RING 3 — outer, muted violet accent, faintest -->
+  <circle cx="50" cy="50" r="42"
+          stroke="#A8B2FF"
+          stroke-width="0.7"
+          stroke-opacity="0.22"/>
+
+  <!-- RING 2 — mid, soft cyan, medium presence -->
+  <circle cx="50" cy="50" r="30"
+          stroke="#66FCF1"
+          stroke-width="0.9"
+          stroke-opacity="0.45"/>
+
+  <!-- RING 1 — inner, brighter cyan, most defined -->
+  <circle cx="50" cy="50" r="18"
+          stroke="#66FCF1"
+          stroke-width="1.1"
+          stroke-opacity="0.72"/>
+
+  <!--
+    Tiny 4-point accent star on RING 2 at 315° (upper-right quadrant)
+    Position: cx + r*cos(315°), cy + r*sin(315°) = 50+21.2, 50−21.2 = (71.2, 28.8)
+  -->
+  <g transform="translate(71.2 28.8)" opacity="0.88">
+    <rect x="-0.9" y="-4.5" width="1.8" height="9" rx="0.9" fill="#66FCF1"/>
+    <rect x="-4.5" y="-0.9" width="9"   height="1.8" rx="0.9" fill="#66FCF1"/>
+  </g>
+
+  <!--
+    Small secondary accent on RING 3 at 200° (lower-left) — single dot
+    Position: 50 + 42*cos(200°), 50 + 42*sin(200°) ≈ (10.5, 35.6)
+  -->
+  <circle cx="10.5" cy="64.4" r="1.6" fill="#A8B2FF" opacity="0.55"/>
+
+  <!-- THE DHRUVA POINT — layered core for luminous depth -->
+  <!-- Outer soft halo -->
+  <circle cx="50" cy="50" r="7"   fill="#66FCF1" opacity="0.12"/>
+  <!-- Mid ring glow -->
+  <circle cx="50" cy="50" r="5"   fill="#66FCF1" opacity="0.30"/>
+  <!-- Bright core -->
+  <circle cx="50" cy="50" r="3.4" fill="#66FCF1"/>
+  <!-- Pure white highlight — the fixed star -->
+  <circle cx="50" cy="50" r="1.8" fill="#FFFFFF"/>
+</svg>

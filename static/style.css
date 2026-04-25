@@ -1,0 +1,934 @@
+:root {
+    /* Deep Space + Slate Palette */
+    --bg-primary: #0B0C10;     /* Surface-Deep */
+    --bg-surface: #1F2833;     /* Surface-Muted */
+    --border-neutral: rgba(197, 198, 199, 0.1);
+    --text-primary: #C5C6C7;   /* High Readability */
+    --text-muted: #8892b0;
+    --accent: #66FCF1;         /* Soft Cyan */
+    --accent-glow: rgba(102, 252, 241, 0.1);
+    --danger: #FF4C4C;
+    --success: #00E676;
+    
+    /* Layout Spec */
+    --top-bar-height: 64px;
+    --sidebar-width: 320px;
+    --chat-max-width: 720px;
+    
+    /* Spacing & Motion */
+    --radius: 16px;
+    --ease-meditate: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 380ms var(--ease-meditate);
+    --focus-ring: 0 0 0 3px rgba(102, 252, 241, 0.2);
+}
+
+.logo-svg {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    line-height: 1.6;
+}
+
+/* Aurora Backdrop (Cultural Neutral) */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 30%, rgba(102, 252, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(102, 252, 241, 0.03) 0%, transparent 50%);
+    z-index: -1;
+    filter: blur(80px);
+    animation: aurora 20s infinite alternate linear;
+}
+
+@keyframes aurora {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(5deg); }
+}
+
+/* Layout App Structure */
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Top Bar (Option A) */
+.top-bar {
+    height: var(--top-bar-height);
+    padding: 0 40px; /* Increased padding */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-neutral);
+    background: rgba(11, 12, 16, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    rotate: 45deg;
+}
+
+/* Cosmic Symbols (Center decoration replacing nav) */
+.cosmic-symbols {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    opacity: 0.55;
+}
+
+.cosmic-symbols span {
+    display: block;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* 1. Orbit ring — thin ellipse with a dot traveling around it */
+.cs-orbit {
+    width: 22px;
+    height: 14px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    animation: spin-slow 8s linear infinite;
+}
+.cs-orbit::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 6px var(--accent);
+}
+
+/* 2. 4-point north star cross */
+.cs-star {
+    width: 3px;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    border-radius: 2px;
+}
+.cs-star::after {
+    content: '';
+    width: 20px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 3. Rotating diamond */
+.cs-diamond {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--accent);
+    transform: rotate(45deg);
+    animation: pulse-dim 3s ease-in-out infinite alternate;
+}
+
+/* 4. Concentric ring (thin outer + dot center) */
+.cs-ring {
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(102, 252, 241, 0.5);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(102, 252, 241, 0.1);
+}
+.cs-ring::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 5. Breathing dot */
+.cs-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: breathe 2.8s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+    from { transform: rotateX(60deg) rotateZ(0deg); }
+    to   { transform: rotateX(60deg) rotateZ(360deg); }
+}
+@keyframes pulse-dim {
+    from { opacity: 0.3; transform: rotate(45deg) scale(0.85); }
+    to   { opacity: 1;   transform: rotate(45deg) scale(1.1); }
+}
+@keyframes breathe {
+    0%, 100% { transform: scale(0.8); opacity: 0.4; }
+    50%       { transform: scale(1.3); opacity: 1; }
+}
+
+/* Cosmic symbol click affordance */
+.cosmic-sym {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.cosmic-sym:hover { opacity: 1; }
+
+/* Cosmic Tooltip Popup */
+.cosmic-tooltip {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: rgba(15, 18, 24, 0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(102, 252, 241, 0.2);
+    border-radius: 14px;
+    padding: 18px 28px;
+    z-index: 2000;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(102,252,241,0.05);
+    opacity: 1;
+    transition: opacity 260ms cubic-bezier(0.4,0,0.2,1), transform 260ms cubic-bezier(0.4,0,0.2,1);
+    min-width: 220px;
+    pointer-events: none;
+}
+
+.cosmic-tooltip.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+}
+
+.ct-sanskrit {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.ct-roman {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.ct-meaning {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+@keyframes tooltip-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+
+/* CSS Icons Implementation */
+.top-bar-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: var(--transition-slow);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.icon-btn:hover { background: rgba(102, 252, 241, 0.05); }
+
+/* Calendar Icon Fix */
+.calendar-icon::before {
+    content: '';
+    width: 18px;
+    height: 16px;
+    border: 2px solid var(--text-muted);
+    border-radius: 3px;
+    display: block; /* Ensure block for centering */
+}
+
+.calendar-icon::after {
+    content: '';
+    width: 2px;
+    height: 4px;
+    background: var(--text-muted);
+    position: absolute;
+    top: 10px; /* Adjusted focus */
+    left: 14px; /* Centered precisely */
+    box-shadow: 10px 0 var(--text-muted);
+    border-radius: 1px;
+}
+
+.calendar-icon:hover::before, .calendar-icon:hover::after {
+    border-color: var(--accent);
+    background-color: var(--accent);
+}
+
+
+/* Theme Toggle Button — sun (dark mode) / moon (light mode) */
+.theme-btn::before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    /* Sun rays via box-shadow */
+    box-shadow:
+        0   -7px 0 -3.5px var(--text-muted),
+        0    7px 0 -3.5px var(--text-muted),
+        7px  0   0 -3.5px var(--text-muted),
+       -7px  0   0 -3.5px var(--text-muted),
+        5px -5px 0 -3.5px var(--text-muted),
+       -5px -5px 0 -3.5px var(--text-muted),
+        5px  5px 0 -3.5px var(--text-muted),
+       -5px  5px 0 -3.5px var(--text-muted);
+    transition: all 300ms var(--ease-meditate);
+}
+
+/* Moon crescent in light mode — inset shadow carves the crescent */
+html.light .theme-btn::before {
+    background: var(--text-muted);
+    border: none;
+    width: 13px;
+    height: 13px;
+    box-shadow: inset 4px -2px 0 1px var(--bg-surface);
+    transform: rotate(20deg);
+}
+
+/* =====================================================
+   LIGHT THEME OVERRIDES
+   ===================================================== */
+html.light {
+    --bg-primary:    #F1F5F9;
+    --bg-surface:    #FFFFFF;
+    --border-neutral: rgba(0, 0, 0, 0.08);
+    --text-primary:  #1E293B;
+    --text-muted:    #64748B;
+    --accent:        #0891B2;
+    --accent-glow:   rgba(8, 145, 178, 0.1);
+    --danger:        #EF4444;
+    --success:       #10B981;
+}
+
+html.light body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+html.light body::before {
+    background:
+        radial-gradient(circle at 70% 30%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.03) 0%, transparent 50%);
+}
+
+html.light .top-bar {
+    background: rgba(241, 245, 249, 0.92);
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+html.light .message.assistant .bubble {
+    background: var(--bg-surface);
+    border-color: var(--border-neutral);
+}
+
+html.light .composer {
+    background: var(--bg-surface);
+    border-color: var(--border-neutral);
+}
+
+html.light .quote-card {
+    background: var(--bg-surface);
+    border-color: var(--border-neutral);
+}
+
+html.light .reflection-sidebar {
+    background: rgba(255, 255, 255, 0.6);
+    border-left-color: var(--border-neutral);
+}
+
+html.light .calendar-popover {
+    background: rgba(255, 255, 255, 0.97);
+}
+
+html.light .send-btn {
+    background: var(--accent);
+}
+
+/* Light mode logo & symbol visibility */
+html.light .logo-svg {
+    /* Darken white/cyan SVG elements to be visible on light background */
+    filter: brightness(0.35) saturate(2.5);
+}
+
+html.light .cosmic-symbols {
+    opacity: 0.85;
+}
+
+html.light .cs-orbit,
+html.light .cs-star,
+html.light .cs-diamond,
+html.light .cs-ring,
+html.light .cs-pulse {
+    /* Cosmic symbols use var(--accent) which already updates,
+       but ::after/:before pseudo-elements with hardcoded colors need a boost */
+    filter: brightness(0.7);
+}
+
+
+.main-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Chat Section */
+.chat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+}
+
+.chat-messages {
+    width: 100%;
+    max-width: var(--chat-max-width);
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    scrollbar-width: none;
+}
+
+.chat-messages::-webkit-scrollbar { display: none; }
+
+/* Reflection Sidebar (Right) */
+.reflection-sidebar {
+    width: var(--sidebar-width);
+    border-left: 1px solid var(--border-neutral);
+    background: rgba(31, 40, 51, 0.3);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+}
+
+/* Reflection Cards */
+.quote-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-neutral);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: var(--transition-slow);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quote-card:hover {
+    border-color: var(--accent);
+    background: rgba(31, 40, 51, 0.5);
+    transform: translateY(-2px);
+}
+
+.quote-sanskrit {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.quote-card .quote-text {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: var(--transition-slow);
+}
+
+.quote-card.expanded .quote-text {
+    -webkit-line-clamp: unset;
+}
+
+.quote-card .source-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* Chat Components */
+.message {
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideUp 0.6s var(--ease-meditate);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message.user { align-self: flex-end; }
+.message.assistant { align-self: flex-start; }
+
+.bubble {
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.message.user .bubble {
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-weight: 500;
+}
+
+.message.assistant .bubble {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-neutral);
+}
+
+/* Reflection Block in Chat */
+.verse-block {
+    margin: 12px 0;
+    background: rgba(102, 252, 241, 0.04);
+    border: 1px solid rgba(102, 252, 241, 0.12);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 18px;
+}
+
+.verse-text {
+    color: var(--accent);
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    display: block;
+}
+
+/* Markdown-rendered elements inside chat bubbles */
+.bubble .md-h2 { font-size: 1.05rem; font-weight: 600; color: var(--accent); margin: 12px 0 6px; letter-spacing: 0.5px; }
+.bubble .md-h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin: 10px 0 4px; }
+.bubble .md-h4 { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin: 8px 0 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+.bubble .md-ul,
+.bubble .md-ol {
+    margin: 8px 0 8px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bubble li { line-height: 1.6; }
+
+.bubble .md-hr {
+    border: none;
+    border-top: 1px solid var(--border-neutral);
+    margin: 14px 0;
+}
+
+.bubble .md-code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    background: rgba(102, 252, 241, 0.08);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Input Composer */
+.composer-wrapper {
+    width: 100%;
+    max-width: var(--chat-max-width);
+    padding: 24px 0 40px;
+}
+
+.composer {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-neutral);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    transition: var(--transition-slow);
+}
+
+.composer:focus-within {
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+}
+
+.composer input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    padding: 12px 16px;
+    font-size: 1rem;
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: var(--accent);
+    color: var(--bg-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-slow);
+}
+
+.send-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Calendar Popover Styling */
+.calendar-popover {
+    position: fixed;
+    top: 80px;
+    right: 40px;
+    width: 320px;
+    background: rgba(31, 40, 51, 0.95);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--border-neutral);
+    border-radius: var(--radius);
+    padding: 24px;
+    z-index: 1000;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms var(--ease-meditate), transform 300ms var(--ease-meditate);
+}
+
+.calendar-popover.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.cal-nav-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    border-radius: 8px;
+}
+
+.cal-nav-btn:hover { background: rgba(255,255,255,0.05); }
+
+.cal-nav-btn::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.cal-nav-btn.prev::before { transform: translate(-25%, -50%) rotate(45deg); }
+.cal-nav-btn.next::before { transform: translate(-75%, -50%) rotate(-135deg); }
+
+.calendar-grid-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.day:hover:not(.empty) { background: rgba(102, 252, 241, 0.1); }
+
+.day.today {
+    background: rgba(102, 252, 241, 0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.calendar-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-neutral);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.close-btn {
+    background: transparent;
+    border: 1px solid var(--border-neutral);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.close-btn:hover { background: rgba(255,255,255,0.05); }
+
+/* =====================================================
+   MOBILE RESPONSIVENESS
+   ===================================================== */
+
+/* Tablet & large phone (≤ 768px) */
+@media (max-width: 768px) {
+
+    /* Top bar: tighten padding */
+    .top-bar {
+        padding: 0 16px;
+        height: 56px;
+    }
+
+    /* Logo: smaller gap and text */
+    .logo {
+        gap: 8px;
+    }
+    .logo span {
+        font-size: 0.85rem;
+        letter-spacing: 1.5px;
+    }
+    .logo-svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* Cosmic symbols: reduce gap and hide less-essential ones */
+    .cosmic-symbols {
+        gap: 16px;
+    }
+    .cs-ring,
+    .cs-pulse {
+        display: none; /* Hide 2 symbols on tablet to avoid crowding */
+    }
+
+    /* Right sidebar: hide completely, chat takes full width */
+    .reflection-sidebar {
+        display: none;
+    }
+
+    /* Chat section: full width */
+    .chat-section {
+        padding: 0 12px;
+    }
+
+    /* Messages: wider bubbles */
+    .message {
+        max-width: 94%;
+    }
+
+    /* Bubble: less padding */
+    .bubble {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+
+    /* Composer: less padding */
+    .composer-wrapper {
+        padding: 16px 0 24px;
+    }
+
+    /* Calendar & cosmic popover: full-width on mobile */
+    .calendar-popover {
+        right: 8px;
+        left: 8px;
+        width: auto;
+        top: 64px;
+    }
+
+    /* Cosmic tooltip: full width */
+    .cosmic-tooltip {
+        left: 16px;
+        right: 16px;
+        transform: none;
+        width: auto;
+        min-width: unset;
+    }
+    .cosmic-tooltip.hidden {
+        transform: translateY(-8px);
+    }
+
+    /* Icon buttons: slightly larger touch targets */
+    .icon-btn {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Small phone (≤ 480px) */
+@media (max-width: 480px) {
+
+    /* Hide cosmic symbols completely on very small screens */
+    .cosmic-symbols {
+        display: none;
+    }
+
+    /* Top bar: minimal */
+    .top-bar {
+        padding: 0 12px;
+    }
+
+    /* Logo wordmark: shorter */
+    .logo span {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    /* Chat messages: near full width */
+    .message {
+        max-width: 98%;
+    }
+
+    /* Bubble text: readable on small screen */
+    .bubble {
+        font-size: 0.92rem;
+        padding: 10px 14px;
+        border-radius: 12px;
+    }
+
+    /* Send button: larger tap target */
+    .send-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    /* Input text: prevent auto-zoom on iOS */
+    .composer input {
+        font-size: 16px;
+    }
+
+    /* Verse block: less padding */
+    .verse-block {
+        padding: 10px 12px;
+    }
+
+    /* Calendar popover full-width */
+    .calendar-popover {
+        right: 4px;
+        left: 4px;
+        padding: 16px;
+    }
+
+    /* Top bar actions: tighter */
+    .top-bar-actions {
+        gap: 4px;
+    }
+}

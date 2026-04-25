@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dharma Guide | Modern Wellness Wisdom</title>
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Top Bar (Minimalist) -->
+        <header class="top-bar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='dhruva-logo.svg') }}" alt="Dhruva Logo" class="logo-svg">
+                <span>DHRUVA</span>
+            </div>
+            <div class="cosmic-symbols">
+                <span class="cs-orbit cosmic-sym" data-name="कक्षा" data-roman="Kakṣā" data-meaning="The orbital path — endless, rhythmic revolution"></span>
+                <span class="cs-star cosmic-sym"  data-name="ध्रुव" data-roman="Dhruva" data-meaning="The Pole Star — immovable, eternal, unwavering"></span>
+                <span class="cs-diamond cosmic-sym" data-name="वज्र" data-roman="Vajra" data-meaning="The Diamond — indestructible, luminous, pure"></span>
+                <span class="cs-ring cosmic-sym"  data-name="मण्डल" data-roman="Maṇḍala" data-meaning="The Sacred Circle — wholeness and cosmic order"></span>
+                <span class="cs-pulse cosmic-sym" data-name="बिन्दु" data-roman="Bindu" data-meaning="The Primal Point — origin of all creation"></span>
+            </div>
+            <!-- Cosmic Symbol Tooltip -->
+            <div id="cosmic-tooltip" class="cosmic-tooltip hidden">
+                <div class="ct-sanskrit"></div>
+                <div class="ct-roman"></div>
+                <div class="ct-meaning"></div>
+            </div>
+            <div class="top-bar-actions">
+                <button id="calendar-btn" class="icon-btn calendar-icon" title="Calendar" aria-label="Calendar"></button>
+                <button id="theme-btn" class="icon-btn theme-btn" title="Toggle Theme" aria-label="Toggle light/dark theme"></button>
+            </div>
+        </header>
+
+        <!-- Calendar Popover -->
+        <div id="calendar-popover" class="calendar-popover hidden">
+            <div class="calendar-header">
+                <button id="prev-month" class="cal-nav-btn prev"></button>
+                <h3 id="current-month-year"></h3>
+                <button id="next-month" class="cal-nav-btn next"></button>
+            </div>
+            <div class="calendar-grid-header">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div id="calendar-days" class="calendar-days"></div>
+            <div class="calendar-footer">
+                <span id="today-text"></span>
+                <button id="close-calendar" class="close-btn">Close</button>
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+            <!-- Central Chat Area -->
+            <main class="chat-section">
+                <div id="chat-container" class="chat-messages">
+                    <div class="message assistant">
+                        <div class="bubble">
+                            Welcome. I am your guide to ancient wisdom. How can we reflect on your path today?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="composer-wrapper">
+                    <form id="chat-form" class="composer">
+                        <input type="text" id="user-input" placeholder="Type your reflection here..." autocomplete="off">
+                        <button type="submit" class="send-btn">
+                            <span style="font-size: 1.2rem;">↗</span>
+                        </button>
+                    </form>
+                </div>
+            </main>
+
+            <!-- Right Sidebar (Reflections) -->
+            <aside id="reflection-sidebar" class="reflection-sidebar">
+                <h4 style="font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px;">DAILY REFLECTIONS</h4>
+                <!-- Injected via JS -->
+            </aside>
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
