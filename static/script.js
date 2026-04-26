@@ -328,9 +328,21 @@ function updateMessage(id, text) {
 }
 
 function parseContent(text) {
+    // 0. Extract mermaid diagrams and render to sidebar
+    let mermaidCode = null;
+    const mermaidRegex = /```mermaid\s*([\s\S]*?)```/g;
+    let parsed = text.replace(mermaidRegex, (match, p1) => {
+        mermaidCode = p1;
+        return ''; // Remove from the actual chat bubble
+    });
+
+    if (mermaidCode) {
+        renderMermaidDiagram(mermaidCode.trim());
+    }
+
     // 1. Detect full Devanagari stanzas FIRST (before any other processing)
     const slokaRegex = /((?:.*[\u0900-\u097F].*\n?)+)/g;
-    let parsed = text.replace(slokaRegex, (match) => {
+    parsed = parsed.replace(slokaRegex, (match) => {
         const verseHtml = match.trim().replace(/\n/g, '<br>');
         return `\n<div class="verse-block"><span class="verse-text">${verseHtml}</span></div>\n`;
     });
@@ -393,6 +405,32 @@ function parseContent(text) {
     parsed = parsed.replace(/\n/g, '<br>');
 
     return parsed;
+}
+
+function renderMermaidDiagram(code) {
+    const container = document.getElementById('diagram-container');
+    if (!container) return;
+    if (typeof mermaid === 'undefined') {
+        container.innerHTML = `<span style="font-size: 0.7rem; color: var(--danger);">Mermaid context missing</span>`;
+        return;
+    }
+
+    // Keep it centered nicely
+    container.innerHTML = `<div id="mermaid-render-div" style="width: 100%; display: flex; justify-content: center;"></div>`;
+    
+    try {
+        mermaid.initialize({ startOnLoad: false, theme: document.documentElement.classList.contains('light') ? 'default' : 'dark' });
+        
+        mermaid.render('mermaid-svg', code).then(result => {
+            const renderDiv = document.getElementById('mermaid-render-div');
+            if(renderDiv) renderDiv.innerHTML = result.svg;
+        }).catch(err => {
+            container.innerHTML = `<span style="font-size: 0.7rem; color: var(--danger);">Failed to render diagram insight.</span>`;
+            console.error("Mermaid error:", err);
+        });
+    } catch (e) {
+        console.error("Mermaid execution error:", e);
+    }
 }
 
 init();

@@ -26,7 +26,8 @@ SYSTEM_INSTRUCTION = (
     "2. If applicable, optionally provide a single relevant Sanskrit verse (with Devanagari, IAST, and English translation) after the factual answer. "
     "3. Keep responses highly relevant, structured, and easy to read. Do not over-philosophize simple queries. "
     "4. Frame epics as academic or psychological archetypes rather than religious figures. "
-    "5. Format verses distinctly so the frontend can render them clearly."
+    "5. Format verses distinctly so the frontend can render them clearly. "
+    "6. [MERMAID VISUALIZATION]: If the user's query involves a process, cycle, conflict, relationship, or concept that can be visualized (like Karma, character connections, Dharma), ALWAYS output a Mermaid.js diagram block starting with ```mermaid and ending with ```. Use flowchart TD or LR. Keep it concise."
 )
 
 model = genai.GenerativeModel(
