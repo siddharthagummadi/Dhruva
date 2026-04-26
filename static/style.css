@@ -875,6 +875,29 @@ html.light .cs-pulse {
     40% { transform: scale(1); opacity: 1; }
 }
 
+/* Sidebar Artwork */
+.wisdom-art-container {
+    margin-top: auto; /* Pushes the image to the bottom of the sidebar */
+    padding-top: 24px;
+    display: flex;
+    justify-content: center;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+}
+
+.wisdom-art-container:hover {
+    opacity: 1;
+}
+
+.wisdom-art {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(102, 252, 241, 0.1);
+    object-fit: cover;
+}
+
 /* =====================================================
    MOBILE RESPONSIVENESS
    ===================================================== */
