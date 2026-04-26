@@ -796,18 +796,19 @@ html.light .cs-pulse {
 /* Tablet & large phone (≤ 768px) */
 @media (max-width: 768px) {
 
-    /* Top bar: tighten padding */
+    /* Top bar: tighten padding, ensure it accounts for potential mobile notches */
     .top-bar {
         padding: 0 16px;
-        height: 56px;
+        padding-top: env(safe-area-inset-top);
+        height: calc(60px + env(safe-area-inset-top));
     }
 
     /* Logo: smaller gap and text */
     .logo {
-        gap: 8px;
+        gap: 10px;
     }
     .logo span {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         letter-spacing: 1.5px;
     }
     .logo-svg {
@@ -831,31 +832,36 @@ html.light .cs-pulse {
 
     /* Chat section: full width */
     .chat-section {
-        padding: 0 12px;
+        padding: 0 16px;
     }
 
     /* Messages: wider bubbles */
     .message {
-        max-width: 94%;
+        max-width: 90%;
     }
 
     /* Bubble: less padding */
     .bubble {
-        padding: 12px 16px;
+        padding: 14px 16px;
         font-size: 0.95rem;
     }
 
-    /* Composer: less padding */
+    /* Composer wrapper: anchor tightly to the bottom on mobile */
     .composer-wrapper {
-        padding: 16px 0 24px;
+        padding: 12px 0 calc(16px + env(safe-area-inset-bottom));
+    }
+    
+    .composer {
+        border-radius: 20px;
+        padding: 6px 10px;
     }
 
     /* Calendar & cosmic popover: full-width on mobile */
     .calendar-popover {
-        right: 8px;
-        left: 8px;
+        right: 12px;
+        left: 12px;
         width: auto;
-        top: 64px;
+        top: calc(70px + env(safe-area-inset-top));
     }
 
     /* Cosmic tooltip: full width */
@@ -885,55 +891,45 @@ html.light .cs-pulse {
         display: none;
     }
 
-    /* Top bar: minimal */
-    .top-bar {
-        padding: 0 12px;
-    }
-
-    /* Logo wordmark: shorter */
-    .logo span {
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-    }
-
     /* Chat messages: near full width */
     .message {
-        max-width: 98%;
+        max-width: 95%;
     }
 
     /* Bubble text: readable on small screen */
     .bubble {
-        font-size: 0.92rem;
-        padding: 10px 14px;
-        border-radius: 12px;
+        font-size: 0.95rem;
+        padding: 12px 14px;
+        border-radius: 14px;
     }
 
     /* Send button: larger tap target */
     .send-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
     }
 
     /* Input text: prevent auto-zoom on iOS */
     .composer input {
         font-size: 16px;
+        padding: 10px 14px;
     }
 
     /* Verse block: less padding */
     .verse-block {
-        padding: 10px 12px;
+        padding: 12px 14px;
     }
 
     /* Calendar popover full-width */
     .calendar-popover {
-        right: 4px;
-        left: 4px;
+        right: 8px;
+        left: 8px;
         padding: 16px;
     }
 
     /* Top bar actions: tighter */
     .top-bar-actions {
-        gap: 4px;
+        gap: 6px;
     }
 }
