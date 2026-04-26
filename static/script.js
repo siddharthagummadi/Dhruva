@@ -169,33 +169,93 @@ function init() {
     initCosmicTooltips();
     initTheme();
     renderReflections();
+    initMetrics();
+    initSessionHistory();
+    initPromptPills();
     userInput.focus();
+}
+
+let chatHistory = [];
+let metrics = { queries: 0, totalTime: 0 };
+
+function initSessionHistory() {
+    const saved = sessionStorage.getItem('dhruva-chatHistory');
+    if (saved) {
+        try {
+            chatHistory = JSON.parse(saved);
+            if (chatHistory.length > 0) {
+                // Clear default HTML welcome message
+                chatContainer.innerHTML = ''; 
+                chatHistory.forEach(msg => {
+                    addMessage(msg.content, msg.role);
+                });
+            }
+        } catch(e) {}
+    }
+}
+
+function initMetrics() {
+    const saved = sessionStorage.getItem('dhruva-metrics');
+    if (saved) {
+        try { metrics = JSON.parse(saved); } catch(e) {}
+    }
+    renderMetrics();
+}
+
+function updateMetrics(timeTakenSeconds) {
+    metrics.queries++;
+    metrics.totalTime += timeTakenSeconds;
+    sessionStorage.setItem('dhruva-metrics', JSON.stringify(metrics));
+    renderMetrics();
+}
+
+function renderMetrics() {
+    const mq = document.getElementById('metric-queries');
+    const mt = document.getElementById('metric-time');
+    if (mq && mt) {
+        mq.innerText = metrics.queries;
+        const avg = metrics.queries > 0 ? (metrics.totalTime / metrics.queries) : 0;
+        mt.innerText = avg.toFixed(1) + 's';
+    }
+}
+
+function initPromptPills() {
+    const pills = document.querySelectorAll('.pill-btn');
+    pills.forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            e.preventDefault();
+            userInput.value = pill.innerText;
+            chatForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        });
+    });
 }
 
 // --- Sidebar Logic ---
 function renderReflections() {
-    reflectionSidebar.innerHTML = '<h4 style="font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 12px;">DAILY REFLECTIONS</h4>';
+    const container = document.getElementById('reflection-container');
+    if (!container) return;
     
-    reflections.forEach((ref, index) => {
-        const card = document.createElement('div');
-        card.className = 'quote-card';
-        card.innerHTML = `
-            <div class="quote-sanskrit">${ref.sanskrit}</div>
-            <p class="quote-text">${ref.english}</p>
-            <span class="source-label">${ref.source}</span>
-        `;
-        
-        card.addEventListener('click', () => {
-            card.classList.toggle('expanded');
-        });
-        
-        reflectionSidebar.appendChild(card);
+    container.innerHTML = '';
+    // Consistently pick one reflection per day
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+    const ref = reflections[dayOfYear % reflections.length];
+    
+    const card = document.createElement('div');
+    card.className = 'quote-card';
+    card.innerHTML = `
+        <div class="quote-sanskrit">${ref.sanskrit}</div>
+        <p class="quote-text">${ref.english}</p>
+        <span class="source-label">${ref.source}</span>
+    `;
+    
+    card.addEventListener('click', () => {
+        card.classList.toggle('expanded');
     });
+    
+    container.appendChild(card);
 }
 
 // --- Chat Logic ---
-let chatHistory = [];
-
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const message = userInput.value.trim();
@@ -205,7 +265,10 @@ chatForm.addEventListener('submit', async (e) => {
     userInput.value = '';
     
     chatHistory.push({ role: 'user', content: message });
+    sessionStorage.setItem('dhruva-chatHistory', JSON.stringify(chatHistory));
+
     const loadingId = addMessage('...', 'assistant');
+    const startTime = performance.now();
 
     try {
         const response = await fetch('/chat', {
@@ -220,8 +283,11 @@ chatForm.addEventListener('submit', async (e) => {
         const data = await response.json();
         
         if (data.status === 'success') {
+            const timeTaken = (performance.now() - startTime) / 1000;
             updateMessage(loadingId, data.reply);
             chatHistory.push({ role: 'assistant', content: data.reply });
+            sessionStorage.setItem('dhruva-chatHistory', JSON.stringify(chatHistory));
+            updateMetrics(timeTaken);
         } else {
             updateMessage(loadingId, 'We are experiencing an interruption. Please try again.');
         }
@@ -236,9 +302,14 @@ function addMessage(text, role) {
     messageDiv.className = `message ${role}`;
     messageDiv.id = id;
     
+    let contentHtml = parseContent(text);
+    if (text === '...') {
+        contentHtml = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+    }
+    
     messageDiv.innerHTML = `
         <div class="bubble">
-            ${parseContent(text)}
+            ${contentHtml}
         </div>
     `;
     

@@ -19,11 +19,8 @@
                 <span>DHRUVA</span>
             </div>
             <div class="cosmic-symbols">
-                <span class="cs-orbit cosmic-sym" data-name="कक्षा" data-roman="Kakṣā" data-meaning="The orbital path — endless, rhythmic revolution"></span>
                 <span class="cs-star cosmic-sym"  data-name="ध्रुव" data-roman="Dhruva" data-meaning="The Pole Star — immovable, eternal, unwavering"></span>
-                <span class="cs-diamond cosmic-sym" data-name="वज्र" data-roman="Vajra" data-meaning="The Diamond — indestructible, luminous, pure"></span>
                 <span class="cs-ring cosmic-sym"  data-name="मण्डल" data-roman="Maṇḍala" data-meaning="The Sacred Circle — wholeness and cosmic order"></span>
-                <span class="cs-pulse cosmic-sym" data-name="बिन्दु" data-roman="Bindu" data-meaning="The Primal Point — origin of all creation"></span>
             </div>
             <!-- Cosmic Symbol Tooltip -->
             <div id="cosmic-tooltip" class="cosmic-tooltip hidden">
@@ -66,19 +63,32 @@
                 </div>
 
                 <div class="composer-wrapper">
+                    <div class="prompt-pills" id="prompt-pills">
+                        <button class="pill-btn">Tell me about karma</button>
+                        <button class="pill-btn">What is leadership according to Gita?</button>
+                        <button class="pill-btn">How to handle anger?</button>
+                        <button class="pill-btn">Explain stock market with wisdom</button>
+                    </div>
                     <form id="chat-form" class="composer">
-                        <input type="text" id="user-input" placeholder="Type your reflection here..." autocomplete="off">
+                        <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off">
                         <button type="submit" class="send-btn">
                             <span style="font-size: 1.2rem;">↗</span>
                         </button>
                     </form>
+                    <p class="disclaimer-text">Answers are AI-generated based on the Ramayana, Mahabharata, and Gita. Verify facts.</p>
                 </div>
             </main>
 
-            <!-- Right Sidebar (Reflections) -->
+            <!-- Right Sidebar (Reflections & Metrics) -->
             <aside id="reflection-sidebar" class="reflection-sidebar">
-                <h4 style="font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px;">DAILY REFLECTIONS</h4>
-                <!-- Injected via JS -->
+                <h4 style="font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px;">SESSION METRICS</h4>
+                <div class="metrics-card">
+                    <div class="metric"><span id="metric-queries">0</span><label>Queries</label></div>
+                    <div class="metric"><span id="metric-time">0.0s</span><label>Avg Speed</label></div>
+                </div>
+
+                <h4 style="font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 24px; margin-bottom: 8px;">DAILY REFLECTION</h4>
+                <div id="reflection-container"></div>
             </aside>
         </div>
     </div>

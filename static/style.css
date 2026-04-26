@@ -789,6 +789,87 @@ html.light .cs-pulse {
 
 .close-btn:hover { background: rgba(255,255,255,0.05); }
 
+/* Sample Prompts */
+.prompt-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+}
+.prompt-pills::-webkit-scrollbar { display: none; }
+.pill-btn {
+    background: var(--bg-surface);
+    border: 1px solid var(--accent-glow);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-slow);
+}
+.pill-btn:hover {
+    background: rgba(102, 252, 241, 0.1);
+    border-color: var(--accent);
+}
+
+/* Disclaimer */
+.disclaimer-text {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+/* Academic Metrics */
+.metrics-card {
+    background: rgba(31, 40, 51, 0.5);
+    border: 1px solid var(--border-neutral);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+.metric span {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.metric label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Typing Spinner */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 4px 8px;
+    align-items: center;
+}
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
 /* =====================================================
    MOBILE RESPONSIVENESS
    ===================================================== */
